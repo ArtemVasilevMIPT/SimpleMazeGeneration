@@ -35,7 +35,7 @@ def manhattanHeuristic(a, b):
 
 
 def findNextNode(nodes):
-    lowestCost = 10000000000000000
+    lowestCost = 10**10
     lowestCostNode = None
     for node in nodes:
         if nodes[node] < lowestCost:

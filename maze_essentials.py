@@ -13,6 +13,7 @@ class Maze:
         self.start = (0, 0)
         self.end = (height - 1, width - 1)
         self.seed = time.time()
+        self.generated = False
         for row in range(height):
             for col in range(width):
                 self.maze[(row, col)] = []
@@ -38,6 +39,7 @@ class Maze:
         print(self.maze)
 
     def reset(self, filler=0):
+        self.generated = False
         for row in range(self.h):
             for col in range(self.w):
                 self.maze[(row, col)] = []
@@ -45,6 +47,7 @@ class Maze:
     def generateDFS(self):
         random.seed(self.seed)
         self.reset()
+        self.generated = True
         self.start = (0, 0)
         stack = []
         # Create "used" array
@@ -90,6 +93,7 @@ class Maze:
     def generateKruskal(self):
         random.seed(self.seed)
         self.reset()
+        self.generated = True
         nodes = [(i, j) for j in range(self.w) for i in range(self.h)]
         neighbors = lambda n: [(n[0] + dx, n[1] + dy) for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1))
                                if n[0] + dx >= 0 and n[0] + dx < self.h and n[1] + dy >= 0 and n[1] + dy < self.w]
@@ -107,6 +111,8 @@ class Maze:
             self.maze[elem[1]] += [elem[0]]
 
     def findBFS(self, start, end):
+        if not self.generated:
+            return [], []
         expandedNodes = [start]
         parents = {start: start}
         visited = set(start)
@@ -131,6 +137,8 @@ class Maze:
         return path, expandedNodes
 
     def findAStar(self, start, end):
+        if not self.generated:
+            return [], []
         expandedNodes = set()
         visitedNodes = {}
         expandedNodes.add(start)
